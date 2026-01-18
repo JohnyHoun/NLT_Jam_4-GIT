@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: b0a3ae0f8b8395b4fa158984c3ad916a
-timeCreated: 1450115908
-licenseType: Store
+guid: 74997819f55d411459b8e959e11c9581
+timeCreated: 1450116170
+licenseType: Free
 NativeFormatImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 26617
-  packageName: Corgi Engine - 2D + 2.5D Platformer
-  packageVersion: 9.4
-  assetPath: Assets/CorgiEngine/Demos/Corgi3D/Materials/2x1Orange.mat
-  uploadId: 846010
