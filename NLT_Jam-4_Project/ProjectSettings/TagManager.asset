@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags:
   - LevelBounds
   - Music
@@ -12,7 +12,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Spikes
   - Water
   - UI
   - 
@@ -66,3 +66,5 @@ TagManager:
   - name: UI
     uniqueID: 3241408355
     locked: 0
+  m_RenderingLayers:
+  - Default
