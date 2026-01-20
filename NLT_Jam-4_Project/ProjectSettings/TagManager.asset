@@ -8,6 +8,10 @@ TagManager:
   - Music
   - Background
   - NoMask
+  - Base_World
+  - Troll_World
+  - Base_Spike
+  - Troll_Spike
   layers:
   - Default
   - TransparentFX
