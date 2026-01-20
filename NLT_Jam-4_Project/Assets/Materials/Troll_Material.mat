@@ -13,8 +13,10 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - INNEROUTLINE_ON
+  - ONLYINNEROUTLINE_ON
   - WAVEUV_ON
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _ONLYINNEROUTLINE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -164,7 +166,7 @@ Material:
     - _NegativeAmount: 1
     - _OffsetUvX: 0.34
     - _OffsetUvY: 0
-    - _OnlyInnerOutline: 0
+    - _OnlyInnerOutline: 1
     - _OnlyOutline: 0
     - _OutlineAlpha: 1
     - _OutlineDistortAmount: 0.5

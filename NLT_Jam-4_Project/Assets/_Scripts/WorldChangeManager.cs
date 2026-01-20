@@ -35,6 +35,9 @@ public class WorldChangeManager : MonoBehaviour
             Destroy(gameObject);
 
         CollectAllRenderers();
+        JustBaseWorld();
+
+        spriteFadeAlphaValue = 0f;
     }
 
     private void Update()
@@ -116,7 +119,7 @@ public class WorldChangeManager : MonoBehaviour
 
     private void UpdateWorldsVisuals()
     {
-        if (_onBaseWorld)
+        if (!_onBaseWorld)
         {
             // Base world visible
             SetRenderersAlpha(baseWorldRenderers, 1f);
@@ -142,6 +145,13 @@ public class WorldChangeManager : MonoBehaviour
         {
             if (renderer == null)
                 continue;
+
+            CompositeCollider2D tilemapCollider = renderer.GetComponent<CompositeCollider2D>();
+
+            if(targetAlpha == 1f && tilemapCollider != null)
+                tilemapCollider.isTrigger = false;
+            else if(targetAlpha == 0f && tilemapCollider != null)
+                tilemapCollider.isTrigger = true;
 
             MaterialPropertyBlock block = new();
             renderer.GetPropertyBlock(block);
