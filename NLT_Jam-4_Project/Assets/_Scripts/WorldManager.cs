@@ -11,8 +11,8 @@ public class WorldManager : MonoBehaviour
     [SerializeField] private List<GameObject> BaseWorlds = new List<GameObject>();
     [SerializeField] private List<GameObject> TrollWorlds = new List<GameObject>();
 
-    [Header("Scene to load number:")]
-    [SerializeField] private int sceneNumber;
+    //[Header("Scene to load number:")]
+    //[SerializeField] private int sceneNumber;
 
     public event Action OnWorldChangeAction; // Global world change event
 
@@ -37,7 +37,7 @@ public class WorldManager : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.R))
         {
-            SceneManager.LoadScene(sceneNumber);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
@@ -67,6 +67,15 @@ public class WorldManager : MonoBehaviour
                 obj.SetActive(true);
             else
                 obj.SetActive(false);
+        }
+    }
+
+    public void ResetWorld()
+    {
+        if(!_onBaseWorld)
+        {
+            ChangeStateListObjects(BaseWorlds, true);
+            ChangeStateListObjects(TrollWorlds, false);
         }
     }
 }
