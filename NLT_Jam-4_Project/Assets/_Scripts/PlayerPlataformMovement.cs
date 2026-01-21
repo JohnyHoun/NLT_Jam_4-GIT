@@ -34,20 +34,15 @@ public class PlayerPlataformMovement : MonoBehaviour
     private Rigidbody2D _rb2D;
     private Animator _animator;
 
+    private PlayerPositionReset playerPositionReset;
+
     private void Start()
     {
         _rb2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
-    }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Spikes"))
-        {
-            damageFeedback?.PlayFeedbacks();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-    }
+        playerPositionReset = GetComponent<PlayerPositionReset>();
+    }   
 
     private void Update()
     {
@@ -96,7 +91,8 @@ public class PlayerPlataformMovement : MonoBehaviour
         HandleFlip();
 
         // Horizontal movement
-        transform.position += (Vector3)_movementInput * speed * Time.fixedDeltaTime;
+        if(playerPositionReset.CanMove)
+            transform.position += (Vector3)_movementInput * speed * Time.fixedDeltaTime;
 
         // Landing (just touched the ground)
         if (!_wasGrounded && _isGrounded)

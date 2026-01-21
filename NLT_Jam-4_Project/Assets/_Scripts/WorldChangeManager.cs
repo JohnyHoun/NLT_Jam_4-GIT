@@ -7,15 +7,24 @@ using UnityEngine.SceneManagement;
 
 public class WorldChangeManager : MonoBehaviour
 {
-    [Header("Visual debug variables")]
+    [Header("Visual Debug:")]
     [SerializeField, Range(0f, 1f)]
     private float spriteFadeAlphaValue = 0f;
+
+    [Header("Checkponts:")]
+    [SerializeField] private Transform firstCheckpoint;
+
+    [Header("Materials:")]
+    [SerializeField] private Material baseWorldMaterial;
+    [SerializeField] private Material trollWorldMaterial;
 
     public event Action OnWorldChangeAction;
 
     public static WorldChangeManager Instance;
 
     private bool _onBaseWorld = true;
+
+    private Vector2 _actualCheckpoint;
 
     // World renderers
     private readonly List<Renderer> baseWorldRenderers = new();

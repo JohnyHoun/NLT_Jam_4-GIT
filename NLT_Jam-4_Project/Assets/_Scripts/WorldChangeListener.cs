@@ -21,19 +21,19 @@ public class WorldChangeListener : MonoBehaviour
 
     private void OnDisable()
     {
-        if (!_isSubscribed || WorldChangeManager.Instance == null)
+        if (!_isSubscribed || WorldChangeController.Instance == null)
             return;
 
-        WorldChangeManager.Instance.OnWorldChangeAction -= HandleWorldChange;
+        WorldChangeController.Instance.OnWorldChangeAction -= HandleWorldChange;
         _isSubscribed = false;
     }
 
     private void TrySubscribe()
     {
-        if (_isSubscribed || WorldChangeManager.Instance == null)
+        if (_isSubscribed || WorldChangeController.Instance == null)
             return;
 
-        WorldChangeManager.Instance.OnWorldChangeAction += HandleWorldChange;
+        WorldChangeController.Instance.OnWorldChangeAction += HandleWorldChange;
         _isSubscribed = true;
     }
 
