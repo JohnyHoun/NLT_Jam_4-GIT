@@ -19,11 +19,16 @@ public class PlayerPlataformMovement : MonoBehaviour
 
     [Header("Feedbacks")]
     [SerializeField] private MMF_Player jumpFeedback;
-    [SerializeField] private MMF_Player landingFeedback;
+    [SerializeField] private MMF_Player baseLandingFeedback;
+    [SerializeField] private MMF_Player strongLandingFeedback;
+    [Space]
     [SerializeField] private MMF_Player damageFeedback;
+    [Space]
+    [SerializeField] private float airTimeToLandFeedback = 0.5f;
 
     private float _coyoteTimeCounter;
     private float _jumpBufferCounter;
+    private float _airTimeCounter = 0f;
 
     private bool _isGrounded;
     private bool _wasGrounded;
@@ -64,6 +69,11 @@ public class PlayerPlataformMovement : MonoBehaviour
                 _rb2D.linearVelocity.y * 0.5f
             );
         }
+
+        if (!_isGrounded)
+            _airTimeCounter = 0f;
+        else
+            _airTimeCounter += Time.deltaTime;
     }
 
     private void FixedUpdate()
@@ -97,7 +107,10 @@ public class PlayerPlataformMovement : MonoBehaviour
         // Landing (just touched the ground)
         if (!_wasGrounded && _isGrounded)
         {
-            landingFeedback?.PlayFeedbacks();
+            if(_airTimeCounter >= airTimeToLandFeedback)
+                baseLandingFeedback?.PlayFeedbacks();
+            else if(_airTimeCounter >= airTimeToLandFeedback * 2)
+                strongLandingFeedback?.PlayFeedbacks();
         }
 
         // Jump

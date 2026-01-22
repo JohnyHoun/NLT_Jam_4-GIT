@@ -1,12 +1,15 @@
+using MoreMountains.Feedbacks;
 using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerPositionReset : MonoBehaviour
 {
     [SerializeField] private Transform firstSpawn;
     [SerializeField] private float spawnMovementDelay = 0.2f;
+    [SerializeField] private UnityEvent respawnFeedbacl;
 
     [NonSerialized] public bool CanMove = true;
 
@@ -22,6 +25,8 @@ public class PlayerPositionReset : MonoBehaviour
             WorldChangeController.Instance.ResetWorld();
             StartCoroutine(MovementDelayCoroutine());
             gameObject.transform.position = firstSpawn.position;
+
+            respawnFeedbacl?.Invoke();
         }
     }
 

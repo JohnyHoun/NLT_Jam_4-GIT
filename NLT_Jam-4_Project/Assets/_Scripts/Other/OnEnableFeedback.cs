@@ -12,5 +12,6 @@ public class OnEnableFeedback : MonoBehaviour
             onEnableEvent?.Invoke();
 
         doFirstFeedback = true;
+        print("Tween");
     }
 }

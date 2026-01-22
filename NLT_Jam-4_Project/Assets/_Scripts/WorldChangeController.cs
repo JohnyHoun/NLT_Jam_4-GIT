@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -11,8 +9,8 @@ public class WorldChangeController : MonoBehaviour
     public static WorldChangeController Instance;
     public event Action OnWorldChangeAction;
 
-    [Header("Checkponts:")]
-    [SerializeField] private Transform firstCheckpoint;
+    [Header("Checkpoints:")]
+    public int ActualCheckpointNumber = 0;
 
     [Header("Worlds:")]
     [SerializeField] private TilemapRenderer doubleWorldRenderer;
@@ -85,7 +83,7 @@ public class WorldChangeController : MonoBehaviour
 
     public void ResetWorld()
     {
-        StartCoroutine(WorldChangeDelay());
+        //StartCoroutine(WorldChangeDelay());
         doubleWorldRenderer.material = baseWorldMaterial;
         baseWorld.SetActive(true);
         trollWorld.SetActive(false);

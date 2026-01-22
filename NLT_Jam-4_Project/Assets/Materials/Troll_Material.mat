@@ -12,9 +12,9 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - DISTORT_ON
   - INNEROUTLINE_ON
   - ONLYINNEROUTLINE_ON
-  - WAVEUV_ON
   m_InvalidKeywords:
   - _ONLYINNEROUTLINE_ON
   m_LightmapFlags: 4
@@ -107,9 +107,9 @@ Material:
     - _ColorSwapRedLuminosity: 0.5
     - _Contrast: 1
     - _CullingOption: 0
-    - _DistortAmount: 0.12
-    - _DistortTexXSpeed: 5
-    - _DistortTexYSpeed: 5
+    - _DistortAmount: 0.05
+    - _DistortTexXSpeed: 2
+    - _DistortTexYSpeed: 2
     - _EditorDrawers: 6
     - _FadeAmount: -0.1
     - _FadeBurnGlow: 2
@@ -213,9 +213,9 @@ Material:
     - _WarpScale: 0.5
     - _WarpSpeed: 8
     - _WarpStrength: 0.025
-    - _WaveAmount: 3
-    - _WaveSpeed: 2.1
-    - _WaveStrength: 1.3
+    - _WaveAmount: 5.3
+    - _WaveSpeed: 2.4
+    - _WaveStrength: 3.6
     - _WaveX: 0.552
     - _WaveY: 0.5
     - _ZTestMode: 4
