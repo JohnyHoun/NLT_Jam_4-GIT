@@ -1,51 +1,44 @@
-using DG.Tweening;
+using System.Collections;
 using UnityEngine;
+using DG.Tweening;
+using UnityEngine.Events;
 
 public class OnCollisionListener : MonoBehaviour
 {
-    [SerializeField] private int checkPointNumber;
-    [SerializeField] private Direction direction = Direction.Left;
-    [Space]
+    [Header("Base Feedback:")]
+    [SerializeField] private float delayTime = 0f;
+    [SerializeField] private UnityEvent colisionEvent;
+    [Header("Move Feedback:")]
+    [SerializeField] private Transform objectToMove;
+    [SerializeField] private float movementTime;
+    [SerializeField] private Vector2 objectNewPosition;
+    [Header("Fall Feedback:")]
+    [SerializeField] private Rigidbody2D objectToFall;
 
-    private GameObject _mainCamera;
-    private bool _canMove = true;
-    private bool _alreadyMove = false;
-
-    private void Start()
-    {
-        _mainCamera = Camera.main.gameObject;
-    }
+    private bool _alreadyDone = false;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Player") || !_canMove)
+        if (!other.CompareTag("Player") || _alreadyDone)
             return;
 
-        int multiplyer = 1;
+        StartCoroutine(MoveDelay());
 
-        //StartCoroutine(MoveDelay());
+        if (objectToMove != null)
+            objectToMove.DOMove(objectNewPosition, movementTime).SetEase(Ease.InOutSine);
 
-        if (_alreadyMove)
-            multiplyer = -1;
-        else
-            multiplyer = 0;
-
-        switch (direction)
+        if(objectToFall != null)
         {
-            case Direction.Right:
-                _mainCamera.transform.DOMoveX((multiplyer * _mainCamera.transform.position.x) + 32f, 0.2f).SetEase(Ease.InOutSine);
-                break;
-            case Direction.Left:
-                _mainCamera.transform.DOMoveX((multiplyer * _mainCamera.transform.position.x) - 32f, 0.2f).SetEase(Ease.InOutSine);
-                break;
-            case Direction.Top:
-                _mainCamera.transform.DOMoveY((multiplyer * _mainCamera.transform.position.y) + 18f, 0.2f).SetEase(Ease.InOutSine);
-                break;
-            case Direction.Down:
-                _mainCamera.transform.DOMoveY((multiplyer * _mainCamera.transform.position.y) - 18f, 0.2f).SetEase(Ease.InOutSine);
-                break;
+            objectToFall.bodyType = RigidbodyType2D.Dynamic;
+            objectToFall.gravityScale = 1f;
         }
+    }
 
-        _alreadyMove = !_alreadyMove;
+    private IEnumerator MoveDelay()
+    {       
+        yield return new WaitForSeconds(delayTime);
+        _alreadyDone = true;
+
+        colisionEvent?.Invoke();
     }
 }

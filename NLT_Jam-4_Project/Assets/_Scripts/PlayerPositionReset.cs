@@ -1,21 +1,34 @@
 using MoreMountains.Feedbacks;
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class PlayerPositionReset : MonoBehaviour
 {
-    [SerializeField] private Transform firstSpawn;
     [SerializeField] private float spawnMovementDelay = 0.2f;
     [SerializeField] private UnityEvent respawnFeedbacl;
 
     [NonSerialized] public bool CanMove = true;
 
+    private Rigidbody2D _rb2d;
+
     private void Start()
     {
-        gameObject.transform.position = firstSpawn.position;
+        _rb2d = GetComponent<Rigidbody2D>();
+        gameObject.transform.position = WorldChangeController.Instance.ActualCheckpointPosition.position;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            WorldChangeController.Instance.ResetWorld();
+            StartCoroutine(MovementDelayCoroutine());
+            gameObject.transform.position = WorldChangeController.Instance.ActualCheckpointPosition.position;
+
+            respawnFeedbacl?.Invoke();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -24,7 +37,11 @@ public class PlayerPositionReset : MonoBehaviour
         {
             WorldChangeController.Instance.ResetWorld();
             StartCoroutine(MovementDelayCoroutine());
-            gameObject.transform.position = firstSpawn.position;
+
+            _rb2d.linearVelocity = Vector2.zero;
+            _rb2d.angularVelocity = 0f;
+
+            gameObject.transform.position = WorldChangeController.Instance.ActualCheckpointPosition.position;
 
             respawnFeedbacl?.Invoke();
         }

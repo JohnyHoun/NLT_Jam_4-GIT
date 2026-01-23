@@ -10,10 +10,11 @@ public class WorldChangeController : MonoBehaviour
     public event Action OnWorldChangeAction;
 
     [Header("Checkpoints:")]
-    public int ActualCheckpointNumber = 0;
+    public Transform ActualCheckpointPosition;
 
     [Header("Worlds:")]
     [SerializeField] private TilemapRenderer doubleWorldRenderer;
+    [SerializeField] private TilemapRenderer decorationRenderer;
     [Space]
     [SerializeField] private GameObject baseWorld;
     [SerializeField] private GameObject trollWorld;
@@ -21,12 +22,15 @@ public class WorldChangeController : MonoBehaviour
     [Header("Materials:")]
     [SerializeField] private Material baseWorldMaterial;
     [SerializeField] private Material trollWorldMaterial;
+    [Space]
+    [SerializeField] private Material trollplayerMaterial;
 
     [Header("Variables:")]
     [SerializeField] private float worldChangeDelay = 0.2f;
 
     private bool _onBaseWorld = true;
     private bool _canChangeWorld = true;
+    private SpriteRenderer _playerRenderer;
 
     private void Awake()
     {
@@ -39,6 +43,7 @@ public class WorldChangeController : MonoBehaviour
     private void Start()
     {
         ResetWorld();
+        _playerRenderer = GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -46,7 +51,7 @@ public class WorldChangeController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift))
             ChangeWorld();
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.Escape))
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -61,6 +66,8 @@ public class WorldChangeController : MonoBehaviour
 
         if (_onBaseWorld)
         {
+            _playerRenderer.material = trollplayerMaterial;
+            decorationRenderer.material = trollWorldMaterial;
             doubleWorldRenderer.material = trollWorldMaterial;
             baseWorld.SetActive(false);
             trollWorld.SetActive(true);
@@ -69,6 +76,8 @@ public class WorldChangeController : MonoBehaviour
         }
         else
         {
+            _playerRenderer.material = baseWorldMaterial;
+            decorationRenderer.material = baseWorldMaterial;
             doubleWorldRenderer.material = baseWorldMaterial;
             baseWorld.SetActive(true);
             trollWorld.SetActive(false);
@@ -84,6 +93,7 @@ public class WorldChangeController : MonoBehaviour
     public void ResetWorld()
     {
         //StartCoroutine(WorldChangeDelay());
+        doubleWorldRenderer.material = baseWorldMaterial;
         doubleWorldRenderer.material = baseWorldMaterial;
         baseWorld.SetActive(true);
         trollWorld.SetActive(false);

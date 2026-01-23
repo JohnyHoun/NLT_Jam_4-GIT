@@ -4,59 +4,41 @@ using UnityEngine;
 using DG.Tweening;
 
 public enum Direction { Left, Right, Top, Down }
+public enum RoomAxis { Horizontal, Vertical }
 
 public class RoomTrigger : MonoBehaviour
 {
-    [SerializeField] private int checkPointNumber;
-    [SerializeField] private Direction direction = Direction.Left;
-    [Space]
+    [SerializeField] private RoomAxis axis;
 
-    private GameObject _mainCamera;
-    private bool _canMove = true;
-    private bool _alreadyMove = false;
+    private float enterValue;
+    private bool playerInside;
 
-    private void Start()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        _mainCamera = Camera.main.gameObject;
+        if (!collision.CompareTag("Player")) return;
+
+        playerInside = true;
+        enterValue = axis == RoomAxis.Horizontal
+            ? collision.transform.position.x
+            : collision.transform.position.y;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (!other.CompareTag("Player") || !_canMove)
-            return;
+        if (!playerInside) return;
+        if (!collision.CompareTag("Player")) return;
 
-        int multiplyer = 1;
+        float exitValue = axis == RoomAxis.Horizontal
+            ? collision.transform.position.x
+            : collision.transform.position.y;
 
-        StartCoroutine(MoveDelay());       
+        int dir = exitValue > enterValue ? +1 : -1;
 
-        if (_alreadyMove)
-            multiplyer = -1;
+        if (axis == RoomAxis.Horizontal)
+            CameraRoomController.Instance.MoveHorizontal(dir);
         else
-            multiplyer = 0;
+            CameraRoomController.Instance.MoveVertical(dir);
 
-        switch(direction)
-        {
-            case Direction.Right:
-                _mainCamera.transform.DOMoveX((multiplyer * _mainCamera.transform.position.x) + 32f, 0.2f).SetEase(Ease.InOutSine);
-                break;
-            case Direction.Left:
-                _mainCamera.transform.DOMoveX((multiplyer * _mainCamera.transform.position.x) - 32f, 0.2f).SetEase(Ease.InOutSine);
-                break;
-            case Direction.Top:
-                _mainCamera.transform.DOMoveY((multiplyer * _mainCamera.transform.position.y) + 18f, 0.2f).SetEase(Ease.InOutSine);
-                break;
-            case Direction.Down:
-                _mainCamera.transform.DOMoveY((multiplyer * _mainCamera.transform.position.y) - 18f, 0.2f).SetEase(Ease.InOutSine);
-                break;
-        }
-
-        _alreadyMove = !_alreadyMove;
-    }
-
-    private IEnumerator MoveDelay()
-    {
-        _canMove = false;
-        yield return new WaitForSeconds(0.5f);
-        _canMove = true;
+        playerInside = false;
     }
 }
