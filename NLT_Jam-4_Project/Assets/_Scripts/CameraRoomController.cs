@@ -29,7 +29,7 @@ public class CameraRoomController : MonoBehaviour
     private void Update()
     {
         if(followPlayer)
-            transform.position = new Vector3 (_player.transform.position.x, _player.transform.position.y, -10f);
+            transform.position = new Vector3 (_player.transform.position.x, _player.transform.position.y + 3f, -10f);
     }
 
     public void FollowCameraMode() => followPlayer = true;
@@ -38,7 +38,7 @@ public class CameraRoomController : MonoBehaviour
     {
         if(!followPlayer) return;
 
-        //followPlayer = false;
+        followPlayer = false;
 
         gameObject.transform.DOMove(destinationPosition, 0.2f).SetEase(Ease.InOutSine).OnComplete(() => followPlayer = false);
     }

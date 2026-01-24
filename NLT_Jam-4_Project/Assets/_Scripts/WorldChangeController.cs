@@ -49,14 +49,15 @@ public class WorldChangeController : MonoBehaviour
     }
 
     private void Start()
-    {
-        ResetWorld();
+    {       
         _playerRenderer = GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>();
 
         FillGameObjectListWithTag(_baseWorldObjects, "Base_World");
         FillGameObjectListWithTag(_trollWorldObjects, "Troll_World");
         FillTilemapRendererListWithTag(_doubleWorldRenderers, "Double_World");
         FillTilemapRendererListWithTag(_decorationRenderers, "Decoration");
+
+        ResetWorld();
     }
 
     private void Update()
