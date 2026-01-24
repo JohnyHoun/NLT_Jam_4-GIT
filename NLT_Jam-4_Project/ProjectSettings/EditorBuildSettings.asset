@@ -236,5 +236,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Test_Scene_3.unity
     guid: 14a23634e10bd7043bd0d64f64d3c5ab
+  - enabled: 1
+    path: Assets/Scenes/Base_Scene.unity
+    guid: 2012afb839c5abb409a7b4b31ec8835a
+  - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 469c75f26cb918a42905700cced5de03
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
