@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 
 public class CameraRoomController : MonoBehaviour
@@ -38,9 +39,18 @@ public class CameraRoomController : MonoBehaviour
     {
         if(!followPlayer) return;
 
-        followPlayer = false;
+        //followPlayer = false;
+        StartCoroutine(PointPlayer());
 
-        gameObject.transform.DOMove(destinationPosition, 0.2f).SetEase(Ease.InOutSine).OnComplete(() => followPlayer = false);
+        gameObject.transform.DOMove(new Vector3(destinationPosition.x, destinationPosition.y, -10f), 0.5f).SetEase(Ease.InOutSine).OnComplete(() => followPlayer = false);
+    }
+
+    private IEnumerator PointPlayer()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        gameObject.transform.DOMove(new Vector3(_player.transform.position.x, _player.transform.position.y + 3f, -10f), 0.5f).SetEase(Ease.InOutSine).
+            OnComplete(() => followPlayer = true);
     }
 
     public void MoveHorizontal(int dir)

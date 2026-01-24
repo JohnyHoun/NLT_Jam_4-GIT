@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class WorldChangeListener : MonoBehaviour
+public class OnWorldChangeListener : MonoBehaviour
 {
     [SerializeField] private UnityEvent onWorldChange_1;
     [SerializeField] private UnityEvent onWorldChange_2;

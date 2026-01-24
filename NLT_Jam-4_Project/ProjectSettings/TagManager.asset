@@ -14,6 +14,8 @@ TagManager:
   - Troll_World
   - Base_Spike
   - Troll_Spike
+  - Movable
+  - Interactable
   layers:
   - Default
   - TransparentFX

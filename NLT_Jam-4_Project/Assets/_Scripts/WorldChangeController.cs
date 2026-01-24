@@ -13,7 +13,7 @@ public class WorldChangeController : MonoBehaviour
     public event Action OnWorldChangeAction;
 
     [Header("Checkpoints:")]
-    public Transform ActualCheckpointPosition;
+    public Checkpoint ActualCheckpointScript;
 
     //[Header("Worlds:")]
     //[SerializeField] private TilemapRenderer doubleWorldRenderer;
@@ -30,6 +30,8 @@ public class WorldChangeController : MonoBehaviour
 
     [Header("Variables:")]
     [SerializeField] private float worldChangeDelay = 0.2f;
+
+    private List<GameObject> _interactableObjects = new List<GameObject>();
 
     private List<GameObject> _baseWorldObjects = new List<GameObject>();
     private List<GameObject> _trollWorldObjects = new List<GameObject>();
@@ -50,8 +52,10 @@ public class WorldChangeController : MonoBehaviour
 
     private void Start()
     {       
+        Camera.main.gameObject.transform.position = new Vector3(ActualCheckpointScript.CameraPosition.x, ActualCheckpointScript.CameraPosition.y, -10);
         _playerRenderer = GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>();
 
+        FillGameObjectListWithTag(_interactableObjects, "Interactable");
         FillGameObjectListWithTag(_baseWorldObjects, "Base_World");
         FillGameObjectListWithTag(_trollWorldObjects, "Troll_World");
         FillTilemapRendererListWithTag(_doubleWorldRenderers, "Double_World");
@@ -133,7 +137,12 @@ public class WorldChangeController : MonoBehaviour
         FadeAllSpritesWithTag("Base_Spike", true);
         FadeAllSpritesWithTag("Troll_Spike", false);
 
-        _onBaseWorld = true;
+        foreach(GameObject movableObject in _interactableObjects)
+        {
+            movableObject.GetComponent<MovableObject>().ResetPosition();
+        }
+
+        _onBaseWorld = true;        
     }
 
     private IEnumerator WorldChangeDelay()

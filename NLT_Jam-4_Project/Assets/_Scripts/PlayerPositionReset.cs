@@ -6,6 +6,9 @@ using UnityEngine.Events;
 
 public class PlayerPositionReset : MonoBehaviour
 {
+    //public static PlayerPositionReset Instance;
+    //public event Action OnRespawnAction;
+
     [SerializeField] private float spawnMovementDelay = 0.2f;
     [SerializeField] private UnityEvent respawnFeedbacl;
 
@@ -16,7 +19,7 @@ public class PlayerPositionReset : MonoBehaviour
     private void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
-        gameObject.transform.position = WorldChangeController.Instance.ActualCheckpointPosition.position;
+        gameObject.transform.position = WorldChangeController.Instance.ActualCheckpointScript.gameObject.transform.position;
     }
 
     private void Update()
@@ -25,7 +28,7 @@ public class PlayerPositionReset : MonoBehaviour
         {
             WorldChangeController.Instance.ResetWorld();
             StartCoroutine(MovementDelayCoroutine());
-            gameObject.transform.position = WorldChangeController.Instance.ActualCheckpointPosition.position;
+            gameObject.transform.position = WorldChangeController.Instance.ActualCheckpointScript.gameObject.transform.position;
 
             respawnFeedbacl?.Invoke();
         }
@@ -41,7 +44,7 @@ public class PlayerPositionReset : MonoBehaviour
             _rb2d.linearVelocity = Vector2.zero;
             _rb2d.angularVelocity = 0f;
 
-            gameObject.transform.position = WorldChangeController.Instance.ActualCheckpointPosition.position;
+            gameObject.transform.position = WorldChangeController.Instance.ActualCheckpointScript.gameObject.transform.position;
 
             respawnFeedbacl?.Invoke();
         }
