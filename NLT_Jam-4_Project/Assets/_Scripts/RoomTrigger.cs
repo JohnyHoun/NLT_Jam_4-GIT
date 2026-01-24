@@ -1,7 +1,4 @@
-using System.Collections;
-using TMPro;
 using UnityEngine;
-using DG.Tweening;
 
 public enum Direction { Left, Right, Top, Down }
 public enum RoomAxis { Horizontal, Vertical }
@@ -9,6 +6,7 @@ public enum RoomAxis { Horizontal, Vertical }
 public class RoomTrigger : MonoBehaviour
 {
     [SerializeField] private RoomAxis axis;
+    [SerializeField] private Vector2 destinationPositionIfFollowing;
 
     private float enterValue;
     private bool playerInside;
@@ -17,7 +15,8 @@ public class RoomTrigger : MonoBehaviour
     {
         if (!collision.CompareTag("Player")) return;
 
-        playerInside = true;
+        playerInside = true;       
+
         enterValue = axis == RoomAxis.Horizontal
             ? collision.transform.position.x
             : collision.transform.position.y;
@@ -27,6 +26,8 @@ public class RoomTrigger : MonoBehaviour
     {
         if (!playerInside) return;
         if (!collision.CompareTag("Player")) return;
+
+        //CameraRoomController.Instance.StaticCameraMode();
 
         float exitValue = axis == RoomAxis.Horizontal
             ? collision.transform.position.x

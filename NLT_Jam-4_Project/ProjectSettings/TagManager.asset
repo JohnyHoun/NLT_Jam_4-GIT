@@ -8,6 +8,8 @@ TagManager:
   - Music
   - Background
   - NoMask
+  - Decoration
+  - Double_World
   - Base_World
   - Troll_World
   - Base_Spike

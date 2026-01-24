@@ -1,5 +1,8 @@
+using NUnit.Framework;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -12,12 +15,12 @@ public class WorldChangeController : MonoBehaviour
     [Header("Checkpoints:")]
     public Transform ActualCheckpointPosition;
 
-    [Header("Worlds:")]
-    [SerializeField] private TilemapRenderer doubleWorldRenderer;
-    [SerializeField] private TilemapRenderer decorationRenderer;
-    [Space]
-    [SerializeField] private GameObject baseWorld;
-    [SerializeField] private GameObject trollWorld;
+    //[Header("Worlds:")]
+    //[SerializeField] private TilemapRenderer doubleWorldRenderer;
+    //[SerializeField] private TilemapRenderer decorationRenderer;
+    //[Space]
+    //[SerializeField] private GameObject baseWorld;
+    //[SerializeField] private GameObject trollWorld;
 
     [Header("Materials:")]
     [SerializeField] private Material baseWorldMaterial;
@@ -27,6 +30,11 @@ public class WorldChangeController : MonoBehaviour
 
     [Header("Variables:")]
     [SerializeField] private float worldChangeDelay = 0.2f;
+
+    private List<GameObject> _baseWorldObjects = new List<GameObject>();
+    private List<GameObject> _trollWorldObjects = new List<GameObject>();
+    private List<TilemapRenderer> _doubleWorldRenderers = new List<TilemapRenderer>();
+    private List<TilemapRenderer> _decorationRenderers = new List<TilemapRenderer>();
 
     private bool _onBaseWorld = true;
     private bool _canChangeWorld = true;
@@ -44,6 +52,11 @@ public class WorldChangeController : MonoBehaviour
     {
         ResetWorld();
         _playerRenderer = GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>();
+
+        FillGameObjectListWithTag(_baseWorldObjects, "Base_World");
+        FillGameObjectListWithTag(_trollWorldObjects, "Troll_World");
+        FillTilemapRendererListWithTag(_doubleWorldRenderers, "Double_World");
+        FillTilemapRendererListWithTag(_decorationRenderers, "Decoration");
     }
 
     private void Update()
@@ -67,22 +80,34 @@ public class WorldChangeController : MonoBehaviour
         if (_onBaseWorld)
         {
             _playerRenderer.material = trollplayerMaterial;
-            decorationRenderer.material = trollWorldMaterial;
-            doubleWorldRenderer.material = trollWorldMaterial;
-            baseWorld.SetActive(false);
-            trollWorld.SetActive(true);
-            ChangeAllSpritesWithTag("Base_Spike", false);
-            ChangeAllSpritesWithTag("Troll_Spike", true);
+
+            ChangeAllTilemapsRenderersListMaterials(_doubleWorldRenderers, trollWorldMaterial);
+            //decorationRenderer.material = trollWorldMaterial;
+            ChangeAllTilemapsRenderersListMaterials(_decorationRenderers, trollWorldMaterial);
+            //doubleWorldRenderer.material = trollWorldMaterial;
+            ActivateGameObjectsList(_baseWorldObjects, false);
+            //baseWorld.SetActive(false);
+            ActivateGameObjectsList(_trollWorldObjects, true);
+            //trollWorld.SetActive(true);
+
+            FadeAllSpritesWithTag("Base_Spike", false);
+            FadeAllSpritesWithTag("Troll_Spike", true);
         }
         else
         {
             _playerRenderer.material = baseWorldMaterial;
-            decorationRenderer.material = baseWorldMaterial;
-            doubleWorldRenderer.material = baseWorldMaterial;
-            baseWorld.SetActive(true);
-            trollWorld.SetActive(false);
-            ChangeAllSpritesWithTag("Base_Spike", true);
-            ChangeAllSpritesWithTag("Troll_Spike", false);
+
+            ChangeAllTilemapsRenderersListMaterials(_doubleWorldRenderers, baseWorldMaterial);
+            //decorationRenderer.material = baseWorldMaterial;
+            ChangeAllTilemapsRenderersListMaterials(_decorationRenderers, baseWorldMaterial);
+            //doubleWorldRenderer.material = baseWorldMaterial;
+            ActivateGameObjectsList(_baseWorldObjects, true);
+            //baseWorld.SetActive(true);
+            ActivateGameObjectsList(_trollWorldObjects, false);
+            //trollWorld.SetActive(false);
+
+            FadeAllSpritesWithTag("Base_Spike", true);
+            FadeAllSpritesWithTag("Troll_Spike", false);
         }
 
         _onBaseWorld = !_onBaseWorld;
@@ -92,13 +117,20 @@ public class WorldChangeController : MonoBehaviour
 
     public void ResetWorld()
     {
-        //StartCoroutine(WorldChangeDelay());
-        doubleWorldRenderer.material = baseWorldMaterial;
-        doubleWorldRenderer.material = baseWorldMaterial;
-        baseWorld.SetActive(true);
-        trollWorld.SetActive(false);
-        ChangeAllSpritesWithTag("Base_Spike", true);
-        ChangeAllSpritesWithTag("Troll_Spike", false);
+        StartCoroutine(WorldChangeDelay());
+
+        ChangeAllTilemapsRenderersListMaterials(_doubleWorldRenderers, baseWorldMaterial);
+        //doubleWorldRenderer.material = baseWorldMaterial;
+        ChangeAllTilemapsRenderersListMaterials(_decorationRenderers, baseWorldMaterial);
+        //decorationRenderer.material = baseWorldMaterial;
+
+        ActivateGameObjectsList(_baseWorldObjects, true);
+        //baseWorld.SetActive(true);
+        ActivateGameObjectsList(_trollWorldObjects, false);
+        //trollWorld.SetActive(false);
+
+        FadeAllSpritesWithTag("Base_Spike", true);
+        FadeAllSpritesWithTag("Troll_Spike", false);
 
         _onBaseWorld = true;
     }
@@ -111,25 +143,80 @@ public class WorldChangeController : MonoBehaviour
     }
 
     // --------------------------------------------------
-    // Spikes Visual Logic
+    // List Fill Logics
     // --------------------------------------------------
 
-    public void ChangeAllSpritesWithTag(string tag, bool appear)
+    private void FillGameObjectListWithTag(List<GameObject> listToFill, string tag) // GameObject list fill
+    {
+        listToFill.Clear();
+
+        GameObject[] foundObjects = GameObject.FindGameObjectsWithTag(tag);
+
+        foreach (GameObject obj in foundObjects)
+        {
+            listToFill.Add(obj);
+        }
+    }
+
+    private void FillTilemapRendererListWithTag(List<TilemapRenderer> listToFill, string tag)  // TilmepaRenderer list fill
+    {
+        listToFill.Clear();
+
+        GameObject[] foundObjects = GameObject.FindGameObjectsWithTag(tag);
+
+        foreach (GameObject obj in foundObjects)
+        {
+            TilemapRenderer tr = obj.GetComponent<TilemapRenderer>();
+            if (tr != null)
+                listToFill.Add(tr);
+        }
+    }
+
+    // --------------------------------------------------
+    // Visual Logics
+    // --------------------------------------------------
+
+    private void FadeAllSpritesWithTag(string tag, bool appear)
     {
         GameObject[] objects = GameObject.FindGameObjectsWithTag(tag);
 
         foreach (GameObject obj in objects)
         {
-            SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
-            if (sr == null) continue;
+            SpriteRenderer renderer = obj.GetComponent<SpriteRenderer>();
+            if (renderer == null) continue;
 
-            Color c = sr.color;
-            if(appear)
+            Color c = renderer.color;
+            if (appear)
                 c.a = 1f;
             else
                 c.a = 0f;
 
-            sr.color = c;
+            renderer.color = c;
+        }
+    }
+    
+    private void ChangeAllTilemapsRenderersListMaterials(List<TilemapRenderer> tilemapRendererList, Material newMaterial)
+    {
+        foreach (TilemapRenderer tilemapRenderer in tilemapRendererList)
+        {
+            if (tilemapRenderer == null)
+                continue;
+
+            tilemapRenderer.material = newMaterial;
+        }
+    }
+
+    private void ActivateGameObjectsList(List<GameObject> gameObjectList, bool activate)
+    {
+        foreach (GameObject obj in gameObjectList)
+        {
+            if (gameObjectList == null)
+                continue;
+
+            if (activate)
+                obj.SetActive(true);
+            else
+                obj.SetActive(false);
         }
     }
 }
