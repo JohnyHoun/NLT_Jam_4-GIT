@@ -139,7 +139,10 @@ public class WorldChangeController : MonoBehaviour
 
         foreach(GameObject movableObject in _interactableObjects)
         {
-            movableObject.GetComponent<MovableObject>().ResetPosition();
+            InteractableObject interactablScript = movableObject.GetComponent<InteractableObject>();
+
+            if(interactablScript != null)
+                interactablScript.ResetPosition();
         }
 
         _onBaseWorld = true;        

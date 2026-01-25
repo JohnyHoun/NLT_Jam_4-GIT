@@ -13,6 +13,8 @@ public class RoomTrigger : MonoBehaviour
     [SerializeField] private Vector3 destination;
     [Space]
     [SerializeField] private float verticalForce = 4f;
+    [Space]
+    [SerializeField] private bool callOnCollision = false;
 
     private bool playerInside;
     private bool _alreadyMove = false;
@@ -38,12 +40,47 @@ public class RoomTrigger : MonoBehaviour
         }
 
         playerInside = true;
+
+        if (!callOnCollision) return;
+
+        if (!collision.CompareTag("Player")) return;
+
+        Rigidbody2D rb2D = collision.GetComponent<Rigidbody2D>();
+
+        //rb2D.linearVelocity = Vector2.zero;
+        //rb2D.angularVelocity = 0f;
+
+        if (!_alreadyMove)
+        {
+            Camera.main.transform.DOMove(destination, 0.2f).SetEase(Ease.OutCubic);
+
+            if (axis == RoomAxis.Horizontal)
+                _player.transform.DOMove(new Vector2(_player.transform.position.x + 0.5f, _player.transform.position.y), 0.2f).SetEase(Ease.OutCubic);
+            else if (axis == RoomAxis.Vertical)
+                _player.transform.DOMove(new Vector2(_player.transform.position.x, _player.transform.position.y + verticalForce), 0.2f).SetEase(Ease.OutCubic);
+        }
+        else
+        {
+            Camera.main.transform.DOMove(_cameraLastPosition, 0.2f).SetEase(Ease.OutCubic);
+
+            if (axis == RoomAxis.Horizontal)
+                _player.transform.DOMove(new Vector2(_player.transform.position.x - 0.5f, _player.transform.position.y), 0.2f).SetEase(Ease.OutCubic);
+            //else if (axis == RoomAxis.Vertical)
+            //_player.transform.DOMove(new Vector2(_player.transform.position.x, _player.transform.position.y - 0.5f), 0.2f).SetEase(Ease.OutCubic);
+        }
+
+        _alreadyMove = !_alreadyMove;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (!playerInside) return;
+        if (!playerInside || callOnCollision) return;
         if (!collision.CompareTag("Player")) return;
+
+        Rigidbody2D rb2D = collision.GetComponent<Rigidbody2D>();
+
+        //rb2D.linearVelocity = Vector2.zero;
+        //rb2D.angularVelocity = 0f;
 
         if (!_alreadyMove)
         {

@@ -5,7 +5,7 @@ public class Trampoline : MonoBehaviour
 {
     [SerializeField] private Vector3 jumpVector;
     [Space] 
-    [SerializeField] private UnityEvent firstJumpFeedback;
+    //[SerializeField] private UnityEvent firstJumpFeedback;
     [SerializeField] private UnityEvent jumpFeedback;
 
     private bool _alreadyJump = false;
@@ -21,10 +21,18 @@ public class Trampoline : MonoBehaviour
 
         rb2D.AddForce(jumpVector, ForceMode2D.Impulse);
 
+        jumpFeedback?.Invoke();
+
+        /*
         if(!_alreadyJump)
         {
             _alreadyJump = true;
             firstJumpFeedback?.Invoke();
         }
+        else
+        {
+            jumpFeedback?.Invoke();
+        }
+        */
     }
 }
