@@ -2,30 +2,37 @@ using UnityEngine;
 
 public class CameraModeChange : MonoBehaviour
 {
-    [Header("Follow:")]
-    [SerializeField] private bool followPlayer;
+    [Header("Camera Mode")]
+    [SerializeField] private bool enableFollow;
 
-    [Header("Static:")]
-    [SerializeField] private Vector2 cameraDestinationPosition;
+    [Header("Static Camera Position")]
+    [SerializeField] private Vector3 staticCameraPosition;
 
-    private bool _playerInside;   
+    private bool playerInside;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.CompareTag("Player")) return;
+        if (playerInside) return;
 
-        _playerInside = true;
+        playerInside = true;
+
+        if (enableFollow)
+        {
+            CameraRoomController.Instance.EnableFollow();
+        }
+        else
+        {
+            Vector3 pos = staticCameraPosition;
+            pos.z = -10f;
+
+            CameraRoomController.Instance.DisableFollowAndMoveTo(pos);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (!_playerInside || !collision.CompareTag("Player")) return;
-
-        if (followPlayer)
-            CameraRoomController.Instance.FollowCameraMode();
-        else
-            CameraRoomController.Instance.StaticCameraMode(cameraDestinationPosition);
-
-        _playerInside = false;
+        if (!collision.CompareTag("Player")) return;
+        playerInside = false;
     }
 }

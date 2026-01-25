@@ -1,61 +1,106 @@
 using DG.Tweening;
-using System.Collections;
 using UnityEngine;
 
 public class CameraRoomController : MonoBehaviour
 {
     public static CameraRoomController Instance;
 
+    [Header("Room Settings")]
     [SerializeField] private float roomWidth = 32f;
     [SerializeField] private float roomHeight = 18f;
-    [SerializeField] private float moveTime = 0.25f;
-    [Space]
-    [SerializeField] private bool followPlayer = false;
+
+    [Header("Follow Settings")]
+    [SerializeField] private float followYOffset = 3f;
+    [SerializeField] private float followSnapTime = 0.35f;
+
+    [Header("Movement")]
+    [SerializeField] private float moveTime = 0.3f;
 
     private int roomX;
     private int roomY;
+
+    private bool followPlayer;
     private bool isMoving;
-    private GameObject _player;
+
+    private GameObject player;
+    private Tween currentTween;
+
+    // -------------------------------------------------
 
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
         else
+        {
             Destroy(gameObject);
+            return;
+        }
 
-        _player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
+
+        roomX = Mathf.RoundToInt(transform.position.x / roomWidth);
+        roomY = Mathf.RoundToInt(transform.position.y / roomHeight);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
-        if(followPlayer)
-            transform.position = new Vector3 (_player.transform.position.x, _player.transform.position.y + 3f, -10f);
+        if (!followPlayer || isMoving || currentTween != null)
+            return;
+
+        transform.position = new Vector3(
+            player.transform.position.x,
+            player.transform.position.y + followYOffset,
+            -10f
+        );
     }
 
-    public void FollowCameraMode() => followPlayer = true;
+    // -------------------------------------------------
+    // FOLLOW MODES
+    // -------------------------------------------------
 
-    public void StaticCameraMode(Vector2 destinationPosition)
+    public void EnableFollow()
     {
-        if(!followPlayer) return;
+        KillTween();
+        followPlayer = false;
 
-        //followPlayer = false;
-        StartCoroutine(PointPlayer());
+        Vector3 target = new Vector3(
+            player.transform.position.x,
+            player.transform.position.y + followYOffset,
+            -10f
+        );
 
-        gameObject.transform.DOMove(new Vector3(destinationPosition.x, destinationPosition.y, -10f), 0.5f).SetEase(Ease.InOutSine).OnComplete(() => followPlayer = false);
+        currentTween = transform.DOMove(target, followSnapTime)
+            .SetEase(Ease.OutCubic)
+            .OnComplete(() =>
+            {
+                currentTween = null;
+                followPlayer = true;
+            });
     }
 
-    private IEnumerator PointPlayer()
+    public void DisableFollowAndMoveTo(Vector3 worldPosition)
     {
-        yield return new WaitForSeconds(0.5f);
+        KillTween();
+        followPlayer = false;
 
-        gameObject.transform.DOMove(new Vector3(_player.transform.position.x, _player.transform.position.y + 3f, -10f), 0.5f).SetEase(Ease.InOutSine).
-            OnComplete(() => followPlayer = true);
+        currentTween = transform.DOMove(worldPosition, moveTime)
+            .SetEase(Ease.InOutSine)
+            .OnComplete(() =>
+            {
+                currentTween = null;
+            });
     }
+
+
+    // -------------------------------------------------
+    // ROOM TRANSITION (CHAMADO PELO TRIGGER)
+    // -------------------------------------------------
 
     public void MoveHorizontal(int dir)
     {
         if (isMoving) return;
+
         roomX += dir;
         MoveToRoom();
     }
@@ -63,6 +108,7 @@ public class CameraRoomController : MonoBehaviour
     public void MoveVertical(int dir)
     {
         if (isMoving) return;
+
         roomY += dir;
         MoveToRoom();
     }
@@ -70,16 +116,34 @@ public class CameraRoomController : MonoBehaviour
     private void MoveToRoom()
     {
         isMoving = true;
+        followPlayer = false;
+        KillTween();
 
         Vector3 target = new Vector3(
             roomX * roomWidth,
             roomY * roomHeight,
-            transform.position.z
+            -10f
         );
 
-        transform.DOKill();
-        transform.DOMove(target, moveTime)
+        currentTween = transform.DOMove(target, moveTime)
             .SetEase(Ease.InOutSine)
-            .OnComplete(() => isMoving = false);
+            .OnComplete(() =>
+            {
+                currentTween = null;
+                isMoving = false;
+            });
+    }
+
+    // -------------------------------------------------
+    // UTILS
+    // -------------------------------------------------
+
+    private void KillTween()
+    {
+        if (currentTween != null && currentTween.IsActive())
+        {
+            currentTween.Kill();
+            currentTween = null;
+        }
     }
 }
