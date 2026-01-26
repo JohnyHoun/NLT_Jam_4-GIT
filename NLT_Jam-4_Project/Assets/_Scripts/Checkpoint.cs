@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
+    public int CheckpointNumber;
     public Vector3 CameraPosition;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.CompareTag("Player") || WorldChangeController.Instance.ActualCheckpointScript.gameObject.transform.position == gameObject.transform.position) return;
+        if (!collision.CompareTag("Player") || WorldChangeController.Instance.ActualCheckpointNumber == CheckpointNumber) return;
 
-        WorldChangeController.Instance.ActualCheckpointScript = this;
+        WorldChangeController.Instance.ActualCheckpointNumber = CheckpointNumber;
     }
 }

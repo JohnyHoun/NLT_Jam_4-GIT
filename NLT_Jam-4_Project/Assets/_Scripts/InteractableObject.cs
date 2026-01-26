@@ -22,6 +22,7 @@ public class InteractableAction
 
 public class InteractableObject : MonoBehaviour
 {
+    [SerializeField] private bool useTrigger = true;
     [SerializeField] private List<InteractableAction> interactions = new List<InteractableAction>();
     [Space]
     [SerializeField] private List<SpriteRenderer> renderers = new List<SpriteRenderer>();
@@ -50,17 +51,17 @@ public class InteractableObject : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (_alreadyDone || !other.CompareTag("Player"))
+        if (_alreadyDone || !other.CompareTag("Player") || !useTrigger)
             return;
-
-        _alreadyDone = true;
 
         CallActions();
     }
 
-    private void CallActions()
+    public void CallActions()
     {
-        foreach(InteractableAction action in interactions)
+        _alreadyDone = true;
+
+        foreach (InteractableAction action in interactions)
         {
             if(action == null) continue;
 

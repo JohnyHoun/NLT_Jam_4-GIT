@@ -7,13 +7,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
+
 public class WorldChangeController : MonoBehaviour
 {
     public static WorldChangeController Instance;
     public event Action OnWorldChangeAction;
+    [NonSerialized] private bool CanChangeWorld = false;
 
     [Header("Checkpoints:")]
-    public Checkpoint ActualCheckpointScript;
+    public int ActualCheckpointNumber;
+    public List<Checkpoint> CheckpointsList;
 
     //[Header("Worlds:")]
     //[SerializeField] private TilemapRenderer doubleWorldRenderer;
@@ -47,12 +50,17 @@ public class WorldChangeController : MonoBehaviour
         if (Instance == null)
             Instance = this;
         else
-            Destroy(gameObject);      
+            Destroy(gameObject);   
+        
+        //if (!CanChangeWorld)
+
     }
 
     private void Start()
     {       
-        Camera.main.gameObject.transform.position = new Vector3(ActualCheckpointScript.CameraPosition.x, ActualCheckpointScript.CameraPosition.y, -10);
+        Camera.main.gameObject.transform.position = new Vector3(CheckpointsList[ActualCheckpointNumber].CameraPosition.x, 
+            CheckpointsList[ActualCheckpointNumber].CameraPosition.y, -10);
+
         _playerRenderer = GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>();
 
         FillGameObjectListWithTag(_interactableObjects, "Interactable");

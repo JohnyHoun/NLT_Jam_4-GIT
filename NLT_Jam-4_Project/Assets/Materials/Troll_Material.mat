@@ -14,9 +14,7 @@ Material:
   m_ValidKeywords:
   - DISTORT_ON
   - INNEROUTLINE_ON
-  - ONLYINNEROUTLINE_ON
-  m_InvalidKeywords:
-  - _ONLYINNEROUTLINE_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -151,7 +149,7 @@ Material:
     - _HologramUnmodAmount: 0
     - _HsvBright: 1
     - _HsvSaturation: 1
-    - _HsvShift: 180
+    - _HsvShift: 360
     - _InnerOutlineAlpha: 1
     - _InnerOutlineGlow: 4
     - _InnerOutlineThickness: 1.72
@@ -166,7 +164,7 @@ Material:
     - _NegativeAmount: 1
     - _OffsetUvX: 0.34
     - _OffsetUvY: 0
-    - _OnlyInnerOutline: 1
+    - _OnlyInnerOutline: 0
     - _OnlyOutline: 0
     - _OutlineAlpha: 1
     - _OutlineDistortAmount: 0.5
@@ -232,7 +230,7 @@ Material:
     - _ColorChangeTarget3: {r: 1, g: 0, b: 0, a: 1}
     - _ColorSwapBlue: {r: 1, g: 1, b: 1, a: 1}
     - _ColorSwapGreen: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorSwapRed: {r: 0.6792453, g: 0.2787469, b: 0.2787469, a: 1}
+    - _ColorSwapRed: {r: 0.0074990317, g: 0.001214108, b: 0.006512091, a: 1}
     - _FadeBurnColor: {r: 1, g: 1, b: 0, a: 1}
     - _GlowColor: {r: 1, g: 1, b: 1, a: 1}
     - _GradBotLeftCol: {r: 0, g: 0, b: 1, a: 1}

@@ -10,7 +10,7 @@ public class PlayerPositionReset : MonoBehaviour
     //public event Action OnRespawnAction;
 
     [SerializeField] private float spawnMovementDelay = 0.2f;
-    [SerializeField] private UnityEvent respawnFeedbacl;
+    [SerializeField] private UnityEvent respawnFeedback;
 
     [NonSerialized] public bool CanMove = true;
 
@@ -19,7 +19,7 @@ public class PlayerPositionReset : MonoBehaviour
     private void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
-        gameObject.transform.position = WorldChangeController.Instance.ActualCheckpointScript.gameObject.transform.position;
+        gameObject.transform.position = WorldChangeController.Instance.CheckpointsList[WorldChangeController.Instance.ActualCheckpointNumber].gameObject.transform.position;
     }
 
     private void Update()
@@ -28,9 +28,9 @@ public class PlayerPositionReset : MonoBehaviour
         {
             WorldChangeController.Instance.ResetWorld();
             StartCoroutine(MovementDelayCoroutine());
-            gameObject.transform.position = WorldChangeController.Instance.ActualCheckpointScript.gameObject.transform.position;
+            gameObject.transform.position = WorldChangeController.Instance.CheckpointsList[WorldChangeController.Instance.ActualCheckpointNumber].gameObject.transform.position;
 
-            respawnFeedbacl?.Invoke();
+            respawnFeedback?.Invoke();
         }
     }
 
@@ -44,9 +44,9 @@ public class PlayerPositionReset : MonoBehaviour
             _rb2d.linearVelocity = Vector2.zero;
             _rb2d.angularVelocity = 0f;
 
-            gameObject.transform.position = WorldChangeController.Instance.ActualCheckpointScript.gameObject.transform.position;
+            gameObject.transform.position = WorldChangeController.Instance.CheckpointsList[WorldChangeController.Instance.ActualCheckpointNumber].gameObject.transform.position;
 
-            respawnFeedbacl?.Invoke();
+            respawnFeedback?.Invoke();
         }
     }
 

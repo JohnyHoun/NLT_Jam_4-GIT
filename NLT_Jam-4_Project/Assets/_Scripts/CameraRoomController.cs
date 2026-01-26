@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
 
 public class CameraRoomController : MonoBehaviour
@@ -62,6 +63,8 @@ public class CameraRoomController : MonoBehaviour
     public void EnableFollow()
     {
         KillTween();
+        if (followPlayer) return;
+
         followPlayer = false;
 
         Vector3 target = new Vector3(
@@ -82,6 +85,8 @@ public class CameraRoomController : MonoBehaviour
     public void DisableFollowAndMoveTo(Vector3 worldPosition)
     {
         KillTween();
+        if (!followPlayer) return;
+
         followPlayer = false;
 
         currentTween = transform.DOMove(worldPosition, moveTime)
