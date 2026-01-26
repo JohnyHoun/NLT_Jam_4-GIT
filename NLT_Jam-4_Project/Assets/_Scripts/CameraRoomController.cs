@@ -20,7 +20,7 @@ public class CameraRoomController : MonoBehaviour
     private int roomX;
     private int roomY;
 
-    private bool followPlayer;
+    [SerializeField] private bool followPlayer;
     private bool isMoving;
 
     private GameObject player;
@@ -42,6 +42,8 @@ public class CameraRoomController : MonoBehaviour
 
         roomX = Mathf.RoundToInt(transform.position.x / roomWidth);
         roomY = Mathf.RoundToInt(transform.position.y / roomHeight);
+
+        followPlayer = true;
     }
 
     private void LateUpdate()

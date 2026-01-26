@@ -42,7 +42,7 @@ public class WorldChangeController : MonoBehaviour
     private List<TilemapRenderer> _decorationRenderers = new List<TilemapRenderer>();
 
     private bool _onBaseWorld = true;
-    private bool _canChangeWorld = true;
+    [SerializeField] private bool _canChangeWorld = true;
     private SpriteRenderer _playerRenderer;
 
     private void Awake()
@@ -77,8 +77,8 @@ public class WorldChangeController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift))
             ChangeWorld();
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //if (Input.GetKeyDown(KeyCode.Escape))
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     // --------------------------------------------------
