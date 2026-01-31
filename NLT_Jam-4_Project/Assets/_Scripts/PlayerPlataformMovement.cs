@@ -1,4 +1,5 @@
 using MoreMountains.Feedbacks;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -33,6 +34,7 @@ public class PlayerPlataformMovement : MonoBehaviour
     private bool _isGrounded;
     private bool _wasGrounded;
     private bool _isFacingRight = true;
+    private bool _canMove = true;
 
     private Vector2 _movementInput;
 
@@ -51,6 +53,8 @@ public class PlayerPlataformMovement : MonoBehaviour
 
     private void Update()
     {
+        if(!_canMove) return;
+
         // Input
         _movementInput.x = Input.GetAxisRaw("Horizontal");
 
@@ -78,6 +82,8 @@ public class PlayerPlataformMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!_canMove) return;
+
         // Store previous grounded state
         _wasGrounded = _isGrounded;
 
@@ -130,6 +136,18 @@ public class PlayerPlataformMovement : MonoBehaviour
             _coyoteTimeCounter = coyoteTime;
         else
             _coyoteTimeCounter -= Time.fixedDeltaTime;
+    }
+
+    public void StopMovementForSomeTime(float delayTime)
+    {
+        StartCoroutine(DelayMovement(delayTime));
+    }
+
+    private IEnumerator DelayMovement(float delayTime)
+    {
+        _canMove = false;
+        yield return new WaitForSeconds(delayTime);
+        _canMove = true;
     }
 
     private void HandleFlip()

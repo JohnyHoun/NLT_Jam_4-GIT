@@ -19,14 +19,14 @@ public class CameraModeChange : MonoBehaviour
 
         if (enableFollow)
         {
-            CameraRoomController.Instance.EnableFollow();
+            CameraController.Instance.EnableFollow();
         }
         else
         {
             Vector3 pos = staticCameraPosition;
             pos.z = -10f;
 
-            CameraRoomController.Instance.DisableFollowAndMoveTo(pos);
+            CameraController.Instance.DisableFollowAndMoveTo(pos);
         }
     }
 

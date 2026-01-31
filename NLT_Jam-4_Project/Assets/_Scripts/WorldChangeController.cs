@@ -77,8 +77,8 @@ public class WorldChangeController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift))
             ChangeWorld();
 
-        //if (Input.GetKeyDown(KeyCode.Escape))
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (Input.GetKeyDown(KeyCode.Escape))
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     // --------------------------------------------------
@@ -131,6 +131,8 @@ public class WorldChangeController : MonoBehaviour
     public void ResetWorld()
     {
         StartCoroutine(WorldChangeDelay());
+
+        _playerRenderer.material = baseWorldMaterial;
 
         ChangeAllTilemapsRenderersListMaterials(_doubleWorldRenderers, baseWorldMaterial);
         //doubleWorldRenderer.material = baseWorldMaterial;

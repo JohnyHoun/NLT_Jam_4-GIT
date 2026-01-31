@@ -1,20 +1,18 @@
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
-
-public enum RoomAxis
-{
-    Horizontal,
-    Vertical
-}
 
 public class RoomTrigger : MonoBehaviour
 {
     [SerializeField] private RoomAxis axis;
     [SerializeField] private Vector3 destination;
     [Space]
+    [SerializeField] private float horizontalForce = 1f;
     [SerializeField] private float verticalForce = 4f;
     [Space]
     [SerializeField] private bool callOnCollision = false;
+    [Space]
+    [SerializeField] private GameObject blocker;
 
     private bool playerInside;
     private bool _alreadyMove = false;
@@ -52,10 +50,12 @@ public class RoomTrigger : MonoBehaviour
 
         if (!_alreadyMove)
         {
-            Camera.main.transform.DOMove(destination, 0.2f).SetEase(Ease.OutCubic);
+            Camera.main.transform.DOMove(destination, 0.2f).SetEase(Ease.OutCubic).OnComplete(() => ActivateBlocker());
 
             if (axis == RoomAxis.Horizontal)
+            {
                 _player.transform.DOMove(new Vector2(_player.transform.position.x + 0.5f, _player.transform.position.y), 0.2f).SetEase(Ease.OutCubic);
+            }
             else if (axis == RoomAxis.Vertical)
                 _player.transform.DOMove(new Vector2(_player.transform.position.x, _player.transform.position.y + verticalForce), 0.2f).SetEase(Ease.OutCubic);
         }
@@ -72,8 +72,18 @@ public class RoomTrigger : MonoBehaviour
         _alreadyMove = !_alreadyMove;
     }
 
+    private void ActivateBlocker()
+    {
+        if(blocker != null)
+            blocker.SetActive(true);
+
+        gameObject.SetActive(false);
+    }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
+        if (!playerInside || callOnCollision) return;
+
         if (!playerInside || callOnCollision) return;
         if (!collision.CompareTag("Player")) return;
 
@@ -84,9 +94,9 @@ public class RoomTrigger : MonoBehaviour
 
         if (!_alreadyMove)
         {
-            Camera.main.transform.DOMove(destination, 0.2f).SetEase(Ease.OutCubic);
+            Camera.main.transform.DOMove(destination, 0.2f).SetEase(Ease.OutCubic).OnComplete(() => ActivateBlocker());
 
-            if(axis == RoomAxis.Horizontal)
+            if (axis == RoomAxis.Horizontal)
                 _player.transform.DOMove(new Vector2(_player.transform.position.x + 0.5f, _player.transform.position.y), 0.2f).SetEase(Ease.OutCubic);
             else if(axis == RoomAxis.Vertical)
                 _player.transform.DOMove(new Vector2(_player.transform.position.x, _player.transform.position.y + verticalForce), 0.2f).SetEase(Ease.OutCubic);

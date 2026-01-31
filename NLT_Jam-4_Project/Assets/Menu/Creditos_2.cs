@@ -29,6 +29,7 @@ public class Creditos_2 : MonoBehaviour
     {
         if (collision.gameObject.tag != "Player") return;
 
-        objectToShow.SetActive(false);
+        if(objectToShow != null)
+            objectToShow.SetActive(false);
     }
 }

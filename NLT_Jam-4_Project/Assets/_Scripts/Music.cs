@@ -7,6 +7,9 @@ public class Music : MonoBehaviour
     [Header("Configurações")]
     public AudioSource audioSource;
 
+    private bool _musicOn = true;
+    private float _initialVolume;
+
     void Awake()
     {
         // Garante que só exista um Music no jogo
@@ -27,5 +30,20 @@ public class Music : MonoBehaviour
 
         audioSource.loop = true; // repete automaticamente
         audioSource.Play();
+
+        _initialVolume = audioSource.volume;
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.M))
+        {
+            if (_musicOn)
+                audioSource.volume = 0f;
+            else
+                audioSource.volume = _initialVolume;
+
+            _musicOn = !_musicOn;
+        }
     }
 }

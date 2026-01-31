@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public class InteractableAction
 {
     public bool Move = false;
-    public Vector2Int TilesToMove;
+    public Vector2 TilesToMove;
     public float MovementDelay = 0.1f;
     public float MovementTime = 0.2f;   
     [Space]
@@ -74,7 +74,7 @@ public class InteractableObject : MonoBehaviour
         }
     }
 
-    public IEnumerator MoveWithDelay(float delayTime, int tilesInX, int tilesInY, float actionTime)
+    public IEnumerator MoveWithDelay(float delayTime, float tilesInX, float tilesInY, float actionTime)
     {
         yield return new WaitForSeconds(delayTime);
 
@@ -85,7 +85,18 @@ public class InteractableObject : MonoBehaviour
     {
         yield return new WaitForSeconds(delayTime);
 
-        //gameObject.transform.parent.DORotate(new Vector3(transform.rotation.x + degreesInX, transform.rotation.z + degreesInZ), actionTime).SetEase(Ease.InOutSine);
+        Transform t = gameObject.transform.parent;
+
+        Vector3 currentEuler = t.eulerAngles;
+
+        t.DORotate(
+            new Vector3(
+                currentEuler.x + degreesInX,
+                currentEuler.y,
+                currentEuler.z + degreesInZ
+            ),
+            actionTime
+        ).SetEase(Ease.InOutSine);
     }
 
     public void ResetPosition()
@@ -93,7 +104,8 @@ public class InteractableObject : MonoBehaviour
         if (_originalPosition != Vector3.zero)
             gameObject.transform.parent.position = _originalPosition;
 
-        transform.rotation = _originalRotation;
+        transform.parent.rotation = Quaternion.Euler(Vector3.zero);
+        //transform.rotation = _originalRotation;
 
         _alreadyDone = false;
     }

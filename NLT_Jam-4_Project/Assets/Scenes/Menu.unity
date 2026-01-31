@@ -725,7 +725,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToShow: {fileID: 0}
   exit: 0
-  loadGame: 0
+  loadGame: 1
   loadMenu: 0
 --- !u!1 &375584325
 GameObject:
@@ -6649,7 +6649,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1359490997
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8282,8 +8282,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   axis: 0
   destination: {x: 0, y: 0, z: 0}
+  horizontalForce: 1
   verticalForce: 4
   callOnCollision: 0
+  blocker: {fileID: 0}
 --- !u!61 &1828161626
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9343,7 +9345,7 @@ Transform:
   m_GameObject: {fileID: 1951830378}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.1, y: -2.2, z: 0}
+  m_LocalPosition: {x: -7.6000004, y: -6.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

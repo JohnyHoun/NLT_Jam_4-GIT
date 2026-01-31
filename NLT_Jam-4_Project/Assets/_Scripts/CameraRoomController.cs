@@ -43,7 +43,7 @@ public class CameraRoomController : MonoBehaviour
         roomX = Mathf.RoundToInt(transform.position.x / roomWidth);
         roomY = Mathf.RoundToInt(transform.position.y / roomHeight);
 
-        followPlayer = true;
+        //followPlayer = true;
     }
 
     private void LateUpdate()
