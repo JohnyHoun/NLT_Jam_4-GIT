@@ -30,6 +30,8 @@ public class WorldChangeController : MonoBehaviour
     [SerializeField] private Material trollWorldMaterial;
     [Space]
     [SerializeField] private Material trollplayerMaterial;
+    [Space]
+    [SerializeField] private Material trollSpikesMaterial;
 
     [Header("Variables:")]
     [SerializeField] private float worldChangeDelay = 0.2f;
@@ -38,8 +40,9 @@ public class WorldChangeController : MonoBehaviour
 
     private List<GameObject> _baseWorldObjects = new List<GameObject>();
     private List<GameObject> _trollWorldObjects = new List<GameObject>();
-    private List<TilemapRenderer> _doubleWorldRenderers = new List<TilemapRenderer>();
-    private List<TilemapRenderer> _decorationRenderers = new List<TilemapRenderer>();
+    private List<TilemapRenderer> _doubleWorldTilemapRenderers = new List<TilemapRenderer>();
+    private List<TilemapRenderer> _decorationTilemapRenderers = new List<TilemapRenderer>();
+    private List<SpriteRenderer> _doubleWorldRenderers = new List<SpriteRenderer>();
 
     private bool _onBaseWorld = true;
     [SerializeField] private bool _canChangeWorld = true;
@@ -50,10 +53,9 @@ public class WorldChangeController : MonoBehaviour
         if (Instance == null)
             Instance = this;
         else
-            Destroy(gameObject);   
-        
-        //if (!CanChangeWorld)
+            Destroy(gameObject);
 
+        ActualCheckpointNumber = PlayerPrefs.GetInt("Actual_Level_Number");
     }
 
     private void Start()
@@ -66,8 +68,9 @@ public class WorldChangeController : MonoBehaviour
         FillGameObjectListWithTag(_interactableObjects, "Interactable");
         FillGameObjectListWithTag(_baseWorldObjects, "Base_World");
         FillGameObjectListWithTag(_trollWorldObjects, "Troll_World");
-        FillTilemapRendererListWithTag(_doubleWorldRenderers, "Double_World");
-        FillTilemapRendererListWithTag(_decorationRenderers, "Decoration");
+        FillTilemapRendererListWithTag(_doubleWorldTilemapRenderers, "Double_World");
+        FillSpriteRendererListWithTag(_doubleWorldRenderers, "Double_World");
+        FillTilemapRendererListWithTag(_decorationTilemapRenderers, "Decoration");
 
         ResetWorld();
     }
@@ -77,7 +80,7 @@ public class WorldChangeController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift))
             ChangeWorld();
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Backspace))
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -94,14 +97,15 @@ public class WorldChangeController : MonoBehaviour
         {
             _playerRenderer.material = trollplayerMaterial;
 
-            ChangeAllTilemapsRenderersListMaterials(_doubleWorldRenderers, trollWorldMaterial);
+            ChangeAllTilemapsRenderersListMaterials(_doubleWorldTilemapRenderers, trollWorldMaterial);
             //decorationRenderer.material = trollWorldMaterial;
-            ChangeAllTilemapsRenderersListMaterials(_decorationRenderers, trollWorldMaterial);
+            ChangeAllTilemapsRenderersListMaterials(_decorationTilemapRenderers, trollWorldMaterial);
             //doubleWorldRenderer.material = trollWorldMaterial;
             ActivateGameObjectsList(_baseWorldObjects, false);
             //baseWorld.SetActive(false);
             ActivateGameObjectsList(_trollWorldObjects, true);
             //trollWorld.SetActive(true);
+            ChangeAllSpriteRenderersListMaterials(_doubleWorldRenderers, trollSpikesMaterial);
 
             FadeAllSpritesWithTag("Base_Spike", false);
             FadeAllSpritesWithTag("Troll_Spike", true);
@@ -110,14 +114,15 @@ public class WorldChangeController : MonoBehaviour
         {
             _playerRenderer.material = baseWorldMaterial;
 
-            ChangeAllTilemapsRenderersListMaterials(_doubleWorldRenderers, baseWorldMaterial);
+            ChangeAllTilemapsRenderersListMaterials(_doubleWorldTilemapRenderers, baseWorldMaterial);
             //decorationRenderer.material = baseWorldMaterial;
-            ChangeAllTilemapsRenderersListMaterials(_decorationRenderers, baseWorldMaterial);
+            ChangeAllTilemapsRenderersListMaterials(_decorationTilemapRenderers, baseWorldMaterial);
             //doubleWorldRenderer.material = baseWorldMaterial;
             ActivateGameObjectsList(_baseWorldObjects, true);
             //baseWorld.SetActive(true);
             ActivateGameObjectsList(_trollWorldObjects, false);
             //trollWorld.SetActive(false);
+            ChangeAllSpriteRenderersListMaterials(_doubleWorldRenderers, baseWorldMaterial);
 
             FadeAllSpritesWithTag("Base_Spike", true);
             FadeAllSpritesWithTag("Troll_Spike", false);
@@ -134,15 +139,17 @@ public class WorldChangeController : MonoBehaviour
 
         _playerRenderer.material = baseWorldMaterial;
 
-        ChangeAllTilemapsRenderersListMaterials(_doubleWorldRenderers, baseWorldMaterial);
+        ChangeAllTilemapsRenderersListMaterials(_doubleWorldTilemapRenderers, baseWorldMaterial);
         //doubleWorldRenderer.material = baseWorldMaterial;
-        ChangeAllTilemapsRenderersListMaterials(_decorationRenderers, baseWorldMaterial);
+        ChangeAllTilemapsRenderersListMaterials(_decorationTilemapRenderers, baseWorldMaterial);
         //decorationRenderer.material = baseWorldMaterial;
 
         ActivateGameObjectsList(_baseWorldObjects, true);
         //baseWorld.SetActive(true);
         ActivateGameObjectsList(_trollWorldObjects, false);
         //trollWorld.SetActive(false);
+
+        ChangeAllSpriteRenderersListMaterials(_doubleWorldRenderers, baseWorldMaterial);
 
         FadeAllSpritesWithTag("Base_Spike", true);
         FadeAllSpritesWithTag("Troll_Spike", false);
@@ -195,6 +202,20 @@ public class WorldChangeController : MonoBehaviour
         }
     }
 
+    private void FillSpriteRendererListWithTag(List<SpriteRenderer> listToFill, string tag)  // TilmepaRenderer list fill
+    {
+        listToFill.Clear();
+
+        GameObject[] foundObjects = GameObject.FindGameObjectsWithTag(tag);
+
+        foreach (GameObject obj in foundObjects)
+        {
+            SpriteRenderer tr = obj.GetComponent<SpriteRenderer>();
+            if (tr != null)
+                listToFill.Add(tr);
+        }
+    }
+
     // --------------------------------------------------
     // Visual Logics
     // --------------------------------------------------
@@ -221,6 +242,17 @@ public class WorldChangeController : MonoBehaviour
     private void ChangeAllTilemapsRenderersListMaterials(List<TilemapRenderer> tilemapRendererList, Material newMaterial)
     {
         foreach (TilemapRenderer tilemapRenderer in tilemapRendererList)
+        {
+            if (tilemapRenderer == null)
+                continue;
+
+            tilemapRenderer.material = newMaterial;
+        }
+    }
+
+    private void ChangeAllSpriteRenderersListMaterials(List<SpriteRenderer> tilemapRendererList, Material newMaterial)
+    {
+        foreach (SpriteRenderer tilemapRenderer in tilemapRendererList)
         {
             if (tilemapRenderer == null)
                 continue;

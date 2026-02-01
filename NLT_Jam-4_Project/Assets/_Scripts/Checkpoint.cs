@@ -10,5 +10,6 @@ public class Checkpoint : MonoBehaviour
         if (!collision.CompareTag("Player") || WorldChangeController.Instance.ActualCheckpointNumber == CheckpointNumber) return;
 
         WorldChangeController.Instance.ActualCheckpointNumber = CheckpointNumber;
+        PlayerPrefs.SetInt("Actual_Level_Number", CheckpointNumber);
     }
 }

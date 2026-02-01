@@ -560,6 +560,7 @@ GameObject:
   - component: {fileID: 367173743}
   - component: {fileID: 367173742}
   - component: {fileID: 367173746}
+  - component: {fileID: 367173747}
   m_Layer: 0
   m_Name: Iniciar
   m_TagString: Untagged
@@ -628,7 +629,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.28719825, y: 0.24913326}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -638,7 +639,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.1435996, y: 0.5017335}
   m_EdgeRadius: 0
 --- !u!212 &367173744
 SpriteRenderer:
@@ -727,6 +728,18 @@ MonoBehaviour:
   exit: 0
   loadGame: 1
   loadMenu: 0
+--- !u!114 &367173747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367173740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a257b83526dfbc643b2de16457c20337, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &375584325
 GameObject:
   m_ObjectHideFlags: 0
@@ -3046,7 +3059,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a257b83526dfbc643b2de16457c20337, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  action: 0
 --- !u!114 &743311161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5130,7 +5142,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.060888052, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -5140,7 +5152,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.7675171, y: 1}
   m_EdgeRadius: 0
 --- !u!212 &1145152508
 SpriteRenderer:
@@ -6326,7 +6338,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.10381149}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -6336,7 +6348,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.792377}
   m_EdgeRadius: 0
 --- !u!212 &1229537773
 SpriteRenderer:
@@ -6618,7 +6630,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1327371736}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1eb5486b5ff1aa943b218dfa61dbdd06, type: 3}
   m_Name: 
@@ -6629,6 +6641,7 @@ MonoBehaviour:
   baseWorldMaterial: {fileID: 2100000, guid: b91c521a06e4b524f8577a018616b389, type: 2}
   trollWorldMaterial: {fileID: 2100000, guid: cafb35c198c45234eb9a4e263bc73491, type: 2}
   trollplayerMaterial: {fileID: 2100000, guid: c092236a255872844bac14acf17d6da3, type: 2}
+  trollSpikesMaterial: {fileID: 0}
   worldChangeDelay: 0.2
   _canChangeWorld: 0
 --- !u!1 &1359490996
@@ -6703,7 +6716,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Jo\xE3o Gamba: Programa\xE7\xE3o, Musica,  Game Design\n\nRene Ferreira:
+  m_text: "-Jo\xE3o Gamba: Programa\xE7\xE3o, Musica,  Game Design\n\n-Rene Ferreira:
     Efeitos Sonoros, Game Design, Level Design"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 76a3f8318f1259a45a900ea00c632eca, type: 2}
@@ -6770,7 +6783,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 186.04376, w: 44.956223}
+  m_margin: {x: 0, y: 0, z: 182.8464, w: 44.956223}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -8267,7 +8280,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1828161625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8924,7 +8937,7 @@ GameObject:
   m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1910957178
 Transform:
   m_ObjectHideFlags: 0

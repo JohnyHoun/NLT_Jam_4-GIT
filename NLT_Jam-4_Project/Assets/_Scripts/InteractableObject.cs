@@ -32,7 +32,7 @@ public class InteractableObject : MonoBehaviour
     private Vector3 _originalPosition;
     private Quaternion _originalRotation;
 
-    private void Start()
+    private void Awake()
     {
         _originalPosition = transform.position;
         _originalRotation = transform.rotation;

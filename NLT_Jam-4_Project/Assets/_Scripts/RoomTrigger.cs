@@ -65,8 +65,8 @@ public class RoomTrigger : MonoBehaviour
 
             if (axis == RoomAxis.Horizontal)
                 _player.transform.DOMove(new Vector2(_player.transform.position.x - 0.5f, _player.transform.position.y), 0.2f).SetEase(Ease.OutCubic);
-            //else if (axis == RoomAxis.Vertical)
-            //_player.transform.DOMove(new Vector2(_player.transform.position.x, _player.transform.position.y - 0.5f), 0.2f).SetEase(Ease.OutCubic);
+            else if (axis == RoomAxis.Vertical)
+                _player.transform.DOMove(new Vector2(_player.transform.position.x, _player.transform.position.y - 0.5f), 0.2f).SetEase(Ease.OutCubic);
         }
 
         _alreadyMove = !_alreadyMove;
